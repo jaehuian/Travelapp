@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../controllers/Account_controller.dart';
+import '../../routes/router.dart';
 
 //최상단 앱바
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -25,18 +27,30 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
 }
 
 //바텀 네비게이션
-class MainBottom extends StatefulWidget{
-  const MainBottom({super.key});
+class MainBottomView extends StatefulWidget{
+  const MainBottomView({super.key});
 
   @override
-  _MainBottomState createState() => _MainBottomState();
+  State<MainBottomView> createState() => _MainBottomViewState();
 }
 
+
 //바텀 네비게이션 UI
-class _MainBottomState extends State<MainBottom>{
+class _MainBottomViewState extends State<MainBottomView>{
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return Scaffold(
+      body: SafeArea(
+        child: MainRouter.widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false, //버튼 라벨 숨기기
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
@@ -48,7 +62,10 @@ class _MainBottomState extends State<MainBottom>{
             icon: Text('여행'),
             label: '여행',
           ),
-        ]
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }

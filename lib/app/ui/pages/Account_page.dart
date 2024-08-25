@@ -5,16 +5,14 @@ import '../../controllers/Account_controller.dart';
 
 //가계부 홈화면 구조
 class AccountPage extends StatelessWidget{
-  final String title;
-
   //가계부 컨트롤러 연결 (getX 사용)
   final AccountController controller = Get.put(AccountController());
-  AccountPage({super.key, required this.title}); //가계부 타이틀 받아옴
+  AccountPage({super.key}); //가계부 타이틀 받아옴
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: MainAppBar(title: title), //'가계부' 타이틀 전달
+      appBar: const MainAppBar(title: '가계부'), //'가계부' 타이틀 전달
 
       floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,8 +27,6 @@ class AccountPage extends StatelessWidget{
       body: Obx(() {
         return AccountBodyState(bodyIndex: controller.bodyIndex.value); //인덱스를 전달받아 body 화면을 그림
     }),
-
-      bottomNavigationBar: const MainBottom(),
       );
   }
 }
