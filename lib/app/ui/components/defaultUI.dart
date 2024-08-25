@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../controllers/Account_controller.dart';
 
 //최상단 앱바
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String title;
-  const MainAppBar({super.key, required this.title}); //생성자
+  const MainAppBar({super.key, required this.title}); //앱바 타이틀 받아옴
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +24,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-//가계부 바디
-class AccountBody extends StatefulWidget{
-  const AccountBody({super.key});
-
-  @override
-  _AccountBodyState createState() => _AccountBodyState();
-}
-
-//가계부 바디 UI
-class _AccountBodyState extends State<AccountBody>{
-
-  @override
-  Widget build(BuildContext context){
-    return const Center(
-      child: Text('바디 영역 입니다'),
-    );
-  }
-}
-
 //바텀 네비게이션
 class MainBottom extends StatefulWidget{
   const MainBottom({super.key});
@@ -56,7 +37,7 @@ class _MainBottomState extends State<MainBottom>{
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        showSelectedLabels: false,
+        showSelectedLabels: false, //버튼 라벨 숨기기
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -69,5 +50,36 @@ class _MainBottomState extends State<MainBottom>{
           ),
         ]
     );
+  }
+}
+
+//플로팅 버튼
+class FloatButton extends StatefulWidget{
+  final String label;
+  final int index;
+  final AccountController controller; //가계부 컨트롤러
+
+  //플로팅버튼 라벨, 인덱스, 컨트롤러(가계부) 받아옴
+  FloatButton({super.key, required this.label, required this.index, required this.controller});
+
+  @override
+  _FloatButtonState createState() => _FloatButtonState();
+}
+class _FloatButtonState extends State<FloatButton>{
+
+  @override
+  Widget build(BuildContext context){
+    return SizedBox(
+      height: 70,
+      width: 50,
+      child:
+      FloatingActionButton.extended(
+        onPressed: () {
+          widget.controller.setBodyIndex(widget.index); //바디인덱스 전달
+          debugPrint('Accountbody Index: ${widget.controller.bodyIndex}'); //로그 출력
+          },
+        label: Text(widget.label),
+        backgroundColor: Colors.blue,
+      ),);
   }
 }
