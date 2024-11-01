@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import './routes/router.dart';
-
 import 'ui/components/defaultUI.dart';
 
 void main() {
-  runApp(const MainPage());
+  // Flutter 엔진과 위젯 트리의 초기화를 보장합니다.
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //앱실행
+  runApp(MainPage());
 }
 
 class MainPage extends StatelessWidget {

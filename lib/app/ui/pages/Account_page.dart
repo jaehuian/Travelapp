@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/defaultUI.dart';
+import '../components/cameraComponent.dart';
 import '../../controllers/Account_controller.dart';
 
 //가계부 홈화면 구조
@@ -75,6 +76,22 @@ class AnalyseBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('분석');
+
+    return Row(
+      children: [
+        Text('분석'), // 텍스트 위젯
+        ElevatedButton(
+          onPressed: () async {
+            /*Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CameraApp()),
+            );*/
+            
+            Get.off(CameraApp());
+          },
+          child: Icon(Icons.camera_alt),
+        ),
+      ],
+    );
   }
 }
