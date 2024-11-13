@@ -64,61 +64,76 @@ class CalendarBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final CalendarController controller = Get.put(CalendarController());
     controller.setFirst(2024, 8);
-        return SizedBox(
-            child: Column(
-              children: [
-                Container(
-                  width: 350,
-                  height: 100,
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var i = 0; i < controller.week.length; i++)
+        return Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: 350,
+              height: 600,
+              child: Obx(
+                    () => GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 7,
+                    mainAxisSpacing: 5,
+                    crossAxisSpacing: 0,
+                  ),
+                  itemCount: controller.days.length,
+                  itemBuilder: (context, i) => InkWell(
+                    onTap: () => controller.setPickedDay(i),
+                    child: Stack(
+                      children: [
+                        // 배경 색상 (선택된 날짜일 경우)
                         Container(
-                          width: 30,
-                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          width: 50,
+                          height: 100,
+                          color: controller.days[i]["picked"].value ? Colors.red : Colors.transparent,
+                        ),
+                        // 날짜 표시 (왼쪽 상단)
+                        Positioned(
+                          top: 0,
+                          left: 5,
                           child: Text(
-                            controller.week[i],
+                            controller.days[i]["day"].toString(),
                             style: TextStyle(
-                              color: i == 0
-                                  ? Colors.red
-                                  : i == controller.week.length - 1
-                                  ? Colors.blue
-                                  : Colors.black,
+                              color: controller.days[i]["inMonth"] ? Colors.black : Colors.grey,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
-                    ],
+                        // 수입과 지출 표시 (오른쪽 하단)
+                        Positioned(
+                          bottom: 0,
+                          right: 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              // 수입 표시
+                              if (controller.days[i]["income"] != null)
+                                Text(
+                                  "+${controller.days[i]["income"]}",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              // 지출 표시
+                              if (controller.days[i]["expense"] != null)
+                                Text(
+                                  "-${controller.days[i]["expense"]}",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(
-                  width: 350,
-                  height: 350,
-                  child: Obx(() => GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7, mainAxisSpacing: 5, crossAxisSpacing: 5),
-                    itemCount: controller.days.length,
-                    itemBuilder: (context, i) => InkWell(
-                      onTap: () => controller.setPickedDay(i),
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        color: controller.days[i]["picked"].value ? Colors.red : Colors.transparent,
-                        child: Text(
-                          controller.days[i]["day"].toString(),
-                          style: TextStyle(
-                            color: controller.days[i]["inMonth"] ? Colors.black : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),),
-                ),
-              ],
-            ),
-        );
+              ),
+            ));
   }
 }
 

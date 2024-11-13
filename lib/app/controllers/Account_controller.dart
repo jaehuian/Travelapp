@@ -35,7 +35,6 @@ class CalendarController extends GetxController{
   // 일자 리스트 설정 함수
   insertDays(int year, int month) {
     days.clear(); // 일자 리스트 초기화
-
     int lastDay = DateTime(year, month + 1, 0).day;
     // 해당 월의 일자 채우기
     for (var i = 1; i <= lastDay; i++) {
@@ -43,6 +42,8 @@ class CalendarController extends GetxController{
         "year": year,
         "month": month,
         "day": i,
+        "income": 2000,
+        "expense": 1000,
         "inMonth": true,
         "picked": false.obs,
       });
@@ -57,6 +58,8 @@ class CalendarController extends GetxController{
           "year": year,
           "month": month - 1,
           "day": prevLastDay - i,
+          "income": 2000,
+          "expense": 1000,
           "inMonth": false,
           "picked": false.obs,
         });
@@ -71,6 +74,8 @@ class CalendarController extends GetxController{
         "year": year,
         "month": month + 1,
         "day": i,
+        "income": 2000,
+        "expense": 1000,
         "inMonth": false,
         "picked": false.obs,
       });
