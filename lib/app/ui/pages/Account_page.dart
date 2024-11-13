@@ -16,12 +16,30 @@ class AccountPage extends StatelessWidget{
       appBar: const MainAppBar(title: '가계부'), //'가계부' 타이틀 전달
 
       floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FloatButton(label: '달력', index: 0, controller: controller),
-            FloatButton(label: '내역', index: 1, controller: controller),
-            FloatButton(label: '분석', index: 2, controller: controller),
-          ]
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FloatingActionButton(
+            heroTag: '달력Button', // heroTag 설정
+            onPressed: () {
+              controller.changeBody(0);
+            },
+            child: Text('달력'),
+          ),
+          FloatingActionButton(
+            heroTag: '내역Button',
+            onPressed: () {
+              controller.changeBody(1);
+            },
+            child: Text('내역'),
+          ),
+          FloatingActionButton(
+            heroTag: '분석Button',
+            onPressed: () {
+              controller.changeBody(2);
+            },
+            child: Text('분석'),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, //플로팅 버튼 위치 
 
@@ -82,12 +100,7 @@ class AnalyseBody extends StatelessWidget {
         Text('분석'), // 텍스트 위젯
         ElevatedButton(
           onPressed: () async {
-            /*Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CameraApp()),
-            );*/
-            
-            Get.off(CameraApp());
+            Get.to(() => CameraApp()); //카메라 화면 이동
           },
           child: Icon(Icons.camera_alt),
         ),

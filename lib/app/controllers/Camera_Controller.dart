@@ -64,8 +64,12 @@ class CameraControllerX extends GetxController with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkCameraPermission(); // 권한을 다시 확인
+    if (state == AppLifecycleState.paused) {
+      // 앱이 일시정지 상태가 되면 카메라 컨트롤러 해제
+      _controller.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      // 앱이 다시 활성화 상태로 돌아오면 권한을 확인 후 초기화
+      _checkCameraPermission();
       if (isCameraPermissionGranted.value && !_controller.value.isInitialized) {
         // 카메라가 아직 초기화되지 않았을 때만 초기화
         _initializeCamera();
