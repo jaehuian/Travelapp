@@ -50,17 +50,22 @@ class AccountPage extends StatelessWidget{
   }
 }
 
-class AccountBodyState extends StatefulWidget{
+class AccountBodyState extends StatefulWidget {
   final int bodyIndex;
+
   const AccountBodyState({super.key, required this.bodyIndex}); //바디인덱스 받아옴
 
   @override
   _AccountBodyState createState() => _AccountBodyState();
 }
-class _AccountBodyState extends State<AccountBodyState>{
 
+class _AccountBodyState extends State<AccountBodyState> {
   //달력, 거래내역, 분석 화면 리스트
-  List<Widget> currentBodies = <Widget>[const CalendarBody(), const HistoryBody(), const AnalyseBody()];
+  List<Widget> currentBodies = <Widget>[
+    const CalendarBody(),
+    const HistoryBody(),
+    const AnalyseBody()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +79,78 @@ class CalendarBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('달력');
+    final CalendarController controller = Get.put(CalendarController());
+    controller.setFirst(2024, 8);
+    return Align(
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          width: 350,
+          height: 600,
+          child: Obx(
+                () => GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                mainAxisSpacing: 5,
+                crossAxisSpacing: 0,
+              ),
+              itemCount: controller.days.length,
+              itemBuilder: (context, i) => InkWell(
+                onTap: () => controller.setPickedDay(i),
+                child: Stack(
+                  children: [
+                    // 배경 색상 (선택된 날짜일 경우)
+                    Container(
+                      width: 50,
+                      height: 100,
+                      color: controller.days[i]["picked"].value ? Colors.red : Colors.transparent,
+                    ),
+                    // 날짜 표시 (왼쪽 상단)
+                    Positioned(
+                      top: 0,
+                      left: 5,
+                      child: Text(
+                        controller.days[i]["day"].toString(),
+                        style: TextStyle(
+                          color: controller.days[i]["inMonth"] ? Colors.black : Colors.grey,
+                        ),
+                      ),
+                    ),
+                    // 수입과 지출 표시 (오른쪽 하단)
+                    Positioned(
+                      bottom: 0,
+                      right: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // 수입 표시
+                          if (controller.days[i]["income"] != null)
+                            Text(
+                              "+${controller.days[i]["income"]}",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          // 지출 표시
+                          if (controller.days[i]["expense"] != null)
+                            Text(
+                              "-${controller.days[i]["expense"]}",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }
 
