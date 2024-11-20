@@ -10,7 +10,7 @@ class AccountController extends GetxController{
   }
 }
 
-class CalendarController extends GetxController{
+class CalendarController extends GetxController {
   var week = ["일", "월", "화", "수", "목", "금", "토"]; // 요일
   static DateTime now = DateTime.now(); // 현재 날짜
 
@@ -19,23 +19,47 @@ class CalendarController extends GetxController{
   RxList days = [].obs; // 일자
 
   setPickedDay(int index) {
-      for(var day in days){
-          day["picked"] = false.obs;
-      }
-      days[index]["picked"] = true.obs;
-      days.refresh();
+    for (var day in days) {
+      day["picked"] = false.obs;
+    }
+    days[index]["picked"] = true.obs;
+    days.refresh();
   }
 
-  // 년, 월, 일 설정 함수
+  // 년, 월 설정 함수
   setFirst(int setYear, int setMonth) {
     year.value = setYear;
     month.value = setMonth;
-    insertDays(year.value, month.value); // 설정한 년도와 월에 맞는 일자 리스트 설정 함수
+    insertDays(year.value, month.value);
   }
+
+  // 이전 달로 이동
+  void previousMonth() {
+    if (month.value == 1) {
+      year.value--;
+      month.value = 12;
+    } else {
+      month.value--;
+    }
+    insertDays(year.value, month.value);
+  }
+
+  // 다음 달로 이동
+  void nextMonth() {
+    if (month.value == 12) {
+      year.value++;
+      month.value = 1;
+    } else {
+      month.value++;
+    }
+    insertDays(year.value, month.value);
+  }
+
   // 일자 리스트 설정 함수
   insertDays(int year, int month) {
-    days.clear(); // 일자 리스트 초기화
+    days.clear();
     int lastDay = DateTime(year, month + 1, 0).day;
+
     // 해당 월의 일자 채우기
     for (var i = 1; i <= lastDay; i++) {
       days.add({
@@ -49,14 +73,14 @@ class CalendarController extends GetxController{
       });
     }
 
-    // 해당 월의 1일 앞에 빈칸이 있으면 이전 달 마지막 날짜까지 채우기
+    // 이전 달 일자 채우기
     if (DateTime(year, month, 1).weekday != 7) {
       var temp = [];
       int prevLastDay = DateTime(year, month, 0).day;
       for (var i = DateTime(year, month, 1).weekday - 1; i >= 0; i--) {
         temp.add({
-          "year": year,
-          "month": month - 1,
+          "year": month == 1 ? year - 1 : year,
+          "month": month == 1 ? 12 : month - 1,
           "day": prevLastDay - i,
           "income": 2000,
           "expense": 1000,
@@ -67,12 +91,12 @@ class CalendarController extends GetxController{
       days = [...temp, ...days].obs;
     }
 
-    // 해당 월의 마지막 일자 뒤에 빈칸이 있으면 다음 달 1일부터 빈칸까지 채우기
+    // 다음 달 일자 채우기
     var temp = [];
     for (var i = 1; i <= 42 - days.length; i++) {
       temp.add({
-        "year": year,
-        "month": month + 1,
+        "year": month == 12 ? year + 1 : year,
+        "month": month == 12 ? 1 : month + 1,
         "day": i,
         "income": 2000,
         "expense": 1000,
@@ -80,7 +104,6 @@ class CalendarController extends GetxController{
         "picked": false.obs,
       });
     }
-
     days = [...days, ...temp].obs;
   }
 }

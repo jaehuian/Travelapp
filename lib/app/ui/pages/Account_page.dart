@@ -64,76 +64,189 @@ class CalendarBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final CalendarController controller = Get.put(CalendarController());
     controller.setFirst(2024, 8);
-        return Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: 350,
-              height: 600,
-              child: Obx(
-                    () => GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7,
-                    mainAxisSpacing: 5,
-                    crossAxisSpacing: 0,
-                  ),
-                  itemCount: controller.days.length,
-                  itemBuilder: (context, i) => InkWell(
-                    onTap: () => controller.setPickedDay(i),
-                    child: Stack(
-                      children: [
-                        // 배경 색상 (선택된 날짜일 경우)
-                        Container(
-                          width: 50,
-                          height: 100,
-                          color: controller.days[i]["picked"].value ? Colors.red : Colors.transparent,
-                        ),
-                        // 날짜 표시 (왼쪽 상단)
-                        Positioned(
-                          top: 0,
-                          left: 5,
-                          child: Text(
-                            controller.days[i]["day"].toString(),
-                            style: TextStyle(
-                              color: controller.days[i]["inMonth"] ? Colors.black : Colors.grey,
-                            ),
-                          ),
-                        ),
-                        // 수입과 지출 표시 (오른쪽 하단)
-                        Positioned(
-                          bottom: 0,
-                          right: 5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              // 수입 표시
-                              if (controller.days[i]["income"] != null)
-                                Text(
-                                  "+${controller.days[i]["income"]}",
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              // 지출 표시
-                              if (controller.days[i]["expense"] != null)
-                                Text(
-                                  "-${controller.days[i]["expense"]}",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
+
+    return Column(
+      children: [
+        // 상단 네비게이션
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_left),
+              onPressed: () => controller.previousMonth(),
+            ),
+            Obx(() => TextButton(
+              onPressed: () => _showYearMonthPicker(context, controller),
+              child: Text(
+                "${controller.year.value}년 ${controller.month.value}월",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            )),
+            IconButton(
+              icon: Icon(Icons.arrow_right),
+              onPressed: () => controller.nextMonth(),
+            ),
+          ],
+        ),
+        // 달력 (요일 포함)
+        Expanded(
+          child: Obx(() => GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7, // 7열 고정
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 0,
+            ),
+            itemCount: controller.week.length + controller.days.length, // 요일 + 날짜
+            itemBuilder: (context, i) {
+              // 요일 표시
+              if (i < controller.week.length) {
+                return Center(
+                  child: Text(
+                    controller.week[i],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: i == 0
+                          ? Colors.red // 일요일 빨간색
+                          : i == 6
+                          ? Colors.blue // 토요일 파란색
+                          : Colors.black, // 나머지 검은색
                     ),
                   ),
+                );
+              }
+
+              // 날짜 표시
+              int dayIndex = i - controller.week.length;
+              return InkWell(
+                onTap: () => controller.setPickedDay(dayIndex),
+                child: Stack(
+                  children: [
+                    // 배경 색상
+                    Container(
+                      color: controller.days[dayIndex]["picked"].value
+                          ? Colors.red
+                          : Colors.transparent,
+                    ),
+                    // 날짜 표시
+                    Positioned(
+                      top: 5,
+                      left: 5,
+                      child: Text(
+                        controller.days[dayIndex]["day"].toString(),
+                        style: TextStyle(
+                          color: controller.days[dayIndex]["inMonth"]
+                              ? Colors.black
+                              : Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (controller.days[dayIndex]["income"] != null)
+                            Text(
+                              "+${controller.days[dayIndex]["income"]}",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          if (controller.days[dayIndex]["expense"] != null)
+                            Text(
+                              "-${controller.days[dayIndex]["expense"]}",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
+              );
+            },
+          )),
+        ),
+      ],
+    );
+  }
+  // BottomSheet 생성 함수
+  void _showYearMonthPicker(BuildContext context, CalendarController controller) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 년도 선택
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_left),
+                    onPressed: () {
+                      controller.year.value -= 1;
+                    },
+                  ),
+                  Obx(() => Text(
+                    "${controller.year.value}년",
+                    style: TextStyle(fontSize: 20),
+                  )),
+                  IconButton(
+                    icon: Icon(Icons.arrow_right),
+                    onPressed: () {
+                      controller.year.value += 1;
+                    },
+                  ),
+                ],
               ),
-            ));
+              SizedBox(height: 10),
+              // 월 선택
+              GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 5,
+                  crossAxisSpacing: 5,
+                ),
+                itemCount: 12,
+                itemBuilder: (context, i) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.month.value = i + 1;
+                      controller.insertDays(controller.year.value, controller.month.value);
+                      Navigator.pop(context); // BottomSheet 닫기
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: i + 1 == controller.month.value ? Colors.blue : Colors.grey[200],
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        "${i + 1}월",
+                        style: TextStyle(
+                          color: i + 1 == controller.month.value ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -156,3 +269,7 @@ class AnalyseBody extends StatelessWidget {
     return const Text('분석');
   }
 }
+
+
+
+
