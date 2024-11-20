@@ -32,7 +32,7 @@ class MainPage extends StatelessWidget {
           backgroundColor: Colors.blue, // AppBar 배경색
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
           iconTheme: IconThemeData(color: Colors.white),
-        ),
+        )*/,
       ),
 
       home: MainBottomView(),
