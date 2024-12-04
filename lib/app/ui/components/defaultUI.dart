@@ -4,26 +4,53 @@ import '../../controllers/Account_controller.dart';
 import '../../routes/router.dart';
 
 //최상단 앱바
-class MainAppBar extends StatelessWidget implements PreferredSizeWidget{
+class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 	final String title;
-	const MainAppBar({super.key, required this.title}); //앱바 타이틀 받아옴
+
+	const MainAppBar({super.key, required this.title});
 
 	@override
 	Widget build(BuildContext context) {
-		return AppBar(
-			title: Text(title),
-			actions: <Widget>[
-				IconButton(
-					icon: const Text('환경설정'),
-					onPressed: (){},
-				)
-			],
+		// 테마 데이터 가져오기
+		final appBarTheme = Theme.of(context).appBarTheme;
+
+		return Container(
+			height: 40, // 화면의 10% 높이 설정
+			decoration: BoxDecoration(
+				color: appBarTheme.backgroundColor, // 앱바 배경색
+				border: const Border(
+					bottom: BorderSide(
+						color: Color.fromRGBO(208, 219, 237, 0.7), // 테두리 색상
+						width: 1.0, // 테두리 두께
+					),
+				),
+			),
+			child: Stack(
+				children: [
+					// 타이틀을 중앙에 배치
+					Center(
+						child: Text(
+							title, // 앱바 타이틀 노출
+							style: appBarTheme.titleTextStyle, // 앱바 타이틀 스타일
+						),
+					),
+					// 오른쪽 아이콘
+					Positioned(
+						right: 16.0, // 오른쪽 여백
+						top: 0.0,
+						bottom: 0.0,
+						child: IconButton(
+							icon: const Text('환경설정'),
+							onPressed: () {},
+						),
+					),
+				],
+			),
 		);
 	}
 
 	@override
-	// 앱바 사이즈 지정 - 기본 앱바 크기 (56.0 dp)
-	Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+	Size get preferredSize => Size.fromHeight(40); // 앱바 높이 설정
 }
 
 //바텀 네비게이션

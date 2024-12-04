@@ -17,31 +17,50 @@ class AccountPage extends StatelessWidget{
 
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          FloatingActionButton(
-            heroTag: '달력Button', // heroTag 설정
-            onPressed: () {
-              controller.changeBody(0);
-            },
-            child: Text('달력'),
-          ),
-          FloatingActionButton(
-            heroTag: '내역Button',
-            onPressed: () {
-              controller.changeBody(1);
-            },
-            child: Text('내역'),
-          ),
-          FloatingActionButton(
-            heroTag: '분석Button',
-            onPressed: () {
-              controller.changeBody(2);
-            },
-            child: Text('분석'),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, //플로팅 버튼 위치 
+          children: [
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(
+                    left: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 왼쪽 테두리
+                    right: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 오른쪽 테두리
+                  ),
+                ),
+              child: CustomFloatingButton(
+                label: '달력',
+                icon: Icons.calendar_today,
+                onPressed: () => controller.changeBody(0),
+              )),
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(
+                    left: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 왼쪽 테두리
+                    right: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 오른쪽 테두리
+                  ),),
+                child: CustomFloatingButton(
+                  label: '내역',
+                  icon: Icons.list,
+                  onPressed: () => controller.changeBody(1),
+                )),
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(
+                    left: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 왼쪽 테두리
+                    right: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 오른쪽 테두리
+                  ),),
+                child: CustomFloatingButton(
+                  label: '분석',
+                  icon: Icons.list,
+                  onPressed: () => controller.changeBody(3),
+                )),
+          ],
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, //플로팅 버튼 위치
 
       body: Obx(() {
         return AccountBodyState(bodyIndex: controller.bodyIndex.value); //인덱스를 전달받아 body 화면을 그림
@@ -73,6 +92,36 @@ class _AccountBodyState extends State<AccountBodyState> {
   }
 }
 
+class CustomFloatingButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const CustomFloatingButton({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
+      child:  Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+          children: [
+            Text(
+              label,
+              style: const TextStyle(color: Color.fromRGBO(23, 30, 58, 1.0)),
+            ),
+          ],
+        ),
+    );
+  }
+}
 //달력 화면
 class CalendarBody extends StatelessWidget {
   const CalendarBody({super.key});

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app/routes/router.dart';
@@ -22,19 +24,34 @@ class MainPage extends StatelessWidget {
 
       // 테마 설정
       theme: ThemeData(
-        primarySwatch: Colors.blue, // 주요 색상 설정
-        /*accentColor: Colors.amber, // 강조 색상
+        scaffoldBackgroundColor: Colors.white, // 전체 배경 흰색
+        // 전체적인 텍스트 스타일 설정
         textTheme: const TextTheme(
-          bodyText1: TextStyle(color: Colors.black, fontSize: 16),
-          bodyText2: TextStyle(color: Colors.grey, fontSize: 14),
+          bodyLarge: TextStyle(
+            color: Color.fromRGBO(23, 30, 58, 1.0),
+            fontFamily: 'default', // 사용자 정의 글꼴
+          ),
+          bodyMedium: TextStyle(
+            color: Color.fromRGBO(23, 30, 58, 1.0),
+            fontFamily: 'default',
+          ),
+          bodySmall: TextStyle(
+            color: Color.fromRGBO(23, 30, 58, 1.0),
+            fontFamily: 'default',
+          ),
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.blue, // AppBar 배경색
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-          iconTheme: IconThemeData(color: Colors.white),
-        )*/,
+          backgroundColor: Colors.white, // AppBar 배경색
+          titleTextStyle: TextStyle(
+              color: Color.fromRGBO(23, 30, 58, 1.0),
+              fontFamily: 'default',
+              fontSize: 16,
+              fontWeight: FontWeight.w500),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        )
       ),
-
+      themeMode: ThemeMode.light, // 명시적으로 라이트 모드 사용
       home: MainBottomView(),
     );
   }
