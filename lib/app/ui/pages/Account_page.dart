@@ -55,19 +55,20 @@ class _AccountBodyState extends State<AccountBodyState> {
     return currentBodies[widget.bodyIndex]; //핸재의 body 영역을 그림
   }
 }
+class YearMonthNavigation extends StatelessWidget {
+  final CalendarController controller;
+  final VoidCallback onYearMonthPickerTap;
 
-//달력 화면
-class CalendarBody extends StatelessWidget {
-  const CalendarBody({super.key});
+  const YearMonthNavigation({
+    required this.controller,
+    required this.onYearMonthPickerTap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final CalendarController controller = Get.put(CalendarController());
-    controller.setFirst(2024, 8);
-
     return Column(
       children: [
-        // 상단 네비게이션
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -76,7 +77,7 @@ class CalendarBody extends StatelessWidget {
               onPressed: () => controller.previousMonth(),
             ),
             Obx(() => TextButton(
-              onPressed: () => _showYearMonthPicker(context, controller),
+              onPressed: onYearMonthPickerTap,
               child: Text(
                 "${controller.year.value}년 ${controller.month.value}월",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -88,6 +89,37 @@ class CalendarBody extends StatelessWidget {
             ),
           ],
         ),
+        Obx(() => Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("수입: ${controller.totalIncome.value}원  |  "),
+              Text("지출: ${controller.totalExpense.value}원"),
+            ],
+          ),
+        )),
+      ],
+    );
+  }
+}
+//달력 화면
+class CalendarBody extends StatelessWidget {
+  const CalendarBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final CalendarController controller = Get.put(CalendarController());
+    controller.setFirst(2024, 8);
+
+    return Column(
+      children: [
+        // YearMonthNavigation 공통 위젯
+        YearMonthNavigation(
+          controller: controller,
+          onYearMonthPickerTap: () => _showYearMonthPicker(context, controller),
+        ),
+
         // 달력 (요일 포함)
         Expanded(
           child: Obx(() => GridView.builder(
@@ -177,6 +209,7 @@ class CalendarBody extends StatelessWidget {
       ],
     );
   }
+
   // BottomSheet 생성 함수
   void _showYearMonthPicker(BuildContext context, CalendarController controller) {
     showModalBottomSheet(
@@ -249,7 +282,6 @@ class CalendarBody extends StatelessWidget {
     );
   }
 }
-
 //거래내역 화면
 class HistoryBody extends StatelessWidget {
   const HistoryBody({super.key});
