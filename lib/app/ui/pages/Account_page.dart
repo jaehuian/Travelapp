@@ -56,7 +56,7 @@ class AccountPage extends StatelessWidget{
                 child: CustomFloatingButton(
                   label: '분석',
                   icon: Icons.list,
-                  onPressed: () => controller.changeBody(3),
+                  onPressed: () => controller.changeBody(2),
                 )),
           ],
         ),
