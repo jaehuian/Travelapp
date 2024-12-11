@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/defaultUI.dart';
+import '../components/cameraComponent.dart';
 import '../../controllers/Account_controller.dart';
 
 //가계부 홈화면 구조
@@ -13,17 +14,55 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(title: '가계부'),
-      //'가계부' 타이틀 전달
 
-      floatingActionButton:
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-        FloatButton(label: '달력', index: 0, controller: controller),
-        FloatButton(label: '내역', index: 1, controller: controller),
-        FloatButton(label: '분석', index: 2, controller: controller),
-      ]),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      //플로팅 버튼 위치
+      appBar: const MainAppBar(title: '가계부'), //'가계부' 타이틀 전달
+
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(
+                    left: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 왼쪽 테두리
+                    right: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 오른쪽 테두리
+                  ),
+                ),
+              child: CustomFloatingButton(
+                label: '달력',
+                icon: Icons.calendar_today,
+                onPressed: () => controller.changeBody(0),
+              )),
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(
+                    left: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 왼쪽 테두리
+                    right: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 오른쪽 테두리
+                  ),),
+                child: CustomFloatingButton(
+                  label: '내역',
+                  icon: Icons.list,
+                  onPressed: () => controller.changeBody(1),
+                )),
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(
+                    left: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 왼쪽 테두리
+                    right: BorderSide(color: Color.fromRGBO(73,117,192, 1.0), width: 1), // 오른쪽 테두리
+                  ),),
+                child: CustomFloatingButton(
+                  label: '분석',
+                  icon: Icons.list,
+                  onPressed: () => controller.changeBody(2),
+                )),
+          ],
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, //플로팅 버튼 위치
 
       body: Obx(() {
         return AccountBodyState(
@@ -100,6 +139,34 @@ class YearMonthNavigation extends StatelessWidget {
           ),
         )),
       ],
+     );}}
+class CustomFloatingButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const CustomFloatingButton({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(20),
+      child:  Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+          children: [
+            Text(
+              label,
+              style: const TextStyle(color: Color.fromRGBO(23, 30, 58, 1.0)),
+            ),
+          ],
+        ),
     );
   }
 }
@@ -298,7 +365,18 @@ class AnalyseBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('분석');
+
+    return Row(
+      children: [
+        Text('분석'), // 텍스트 위젯
+        ElevatedButton(
+          onPressed: () async {
+            Get.to(() => CameraApp()); //카메라 화면 이동
+          },
+          child: Icon(Icons.camera_alt),
+        ),
+      ],
+    );
   }
 }
 

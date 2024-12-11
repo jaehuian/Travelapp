@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-class AccountController extends GetxController{
+class AccountController extends GetxController {
   //바디인덱스
   var bodyIndex = 0.obs;
 
   //출력할 바디 인덱스를 세팅
-  void setBodyIndex(var index){
+  void setBodyIndex(var index) {
     bodyIndex.value = index;
   }
 }
@@ -27,6 +27,7 @@ class CalendarController extends GetxController {
   // 선택된 날짜
   setPickedDay(int index) {
     for (var day in days) {
+
       day["picked"] = false.obs;
     }
     days[index]["picked"] = true.obs;
@@ -91,14 +92,17 @@ class CalendarController extends GetxController {
         "year": year,
         "month": month,
         "day": i,
+
         "income": 0,  // 예시로 고정된 수입
         "expense": 1000, // 예시로 고정된 지출
+
         "inMonth": true,
         "picked": false.obs,
       });
     }
 
     // 이전 달 일자 채우기
+
     if (DateTime(year, month, 1).weekday != 7) {
       var temp = [];
       int prevLastDay = DateTime(year, month, 0).day;
@@ -125,6 +129,7 @@ class CalendarController extends GetxController {
         "day": i,
         "income": 2000,  // 예시로 고정된 수입
         "expense": 1000, // 예시로 고정된 지출
+
         "inMonth": false,
         "picked": false.obs,
       });
