@@ -94,6 +94,56 @@ class _AccountBodyState extends State<AccountBodyState> {
     return currentBodies[widget.bodyIndex]; //핸재의 body 영역을 그림
   }
 }
+// class YearMonthNavigation extends StatelessWidget {
+//   final CalendarController controller;
+//   final VoidCallback onYearMonthPickerTap;
+//
+//   const YearMonthNavigation({
+//     required this.controller,
+//     required this.onYearMonthPickerTap,
+//     super.key,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             IconButton(
+//               icon: Icon(Icons.arrow_left),
+//               onPressed: () => controller.previousMonth(),
+//             ),
+//             Obx(() => TextButton(
+//               onPressed: onYearMonthPickerTap,
+//               child:  Text(
+//                 "${controller.year.value}년 ${controller.month.value}월",
+//                 style: const TextStyle(
+//                   fontSize: 18,
+//                   // color: Colors.white,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             )),
+//             IconButton(
+//               icon: const Icon(Icons.arrow_right, color: Colors.white),
+//               onPressed: () => controller.nextMonth(),
+//             ),
+//           ],
+//         ),
+//         Obx(() => Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Text("수입: ${controller.totalIncome.value}원  |  "),
+//               Text("지출: ${controller.totalExpense.value}원"),
+//             ],
+//           ),
+//         )),
+//       ],
+//      );}}
 class YearMonthNavigation extends StatelessWidget {
   final CalendarController controller;
   final VoidCallback onYearMonthPickerTap;
@@ -107,39 +157,89 @@ class YearMonthNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
       children: [
+        // 년/월 네비게이션
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_left),
+              icon: const Icon(Icons.arrow_left, color: Colors.black),
               onPressed: () => controller.previousMonth(),
             ),
             Obx(() => TextButton(
               onPressed: onYearMonthPickerTap,
               child: Text(
                 "${controller.year.value}년 ${controller.month.value}월",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             )),
             IconButton(
-              icon: Icon(Icons.arrow_right),
+              icon: const Icon(Icons.arrow_right, color: Colors.black),
               onPressed: () => controller.nextMonth(),
             ),
           ],
         ),
+
+        // 수입/지출 표시 부분
         Obx(() => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("수입: ${controller.totalIncome.value}원  |  "),
-              Text("지출: ${controller.totalExpense.value}원"),
+              // 지출
+              Row(
+                children: [
+                  Text(
+                    "지출 ",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800], // 회색
+                    ),
+                  ),
+                  Text(
+                    "${controller.totalExpense.value}원",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue, // 주황색
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4), // 간격
+              // 수입
+              Row(
+                children: [
+                  Text(
+                    "수입 ",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800], // 회색
+                    ),
+                  ),
+                  Text(
+                    "${controller.totalIncome.value}원",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange, // 파란색
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         )),
       ],
-     );}}
+    );
+  }
+}
 class CustomFloatingButton extends StatelessWidget {
   final String label;
   final IconData icon;

@@ -8,6 +8,10 @@ class AccountController extends GetxController {
   void setBodyIndex(var index) {
     bodyIndex.value = index;
   }
+  // 화면을 변경하는 함수
+  void changeBody(int index) {
+    bodyIndex.value = index;  // index 값을 받아서 bodyIndex를 업데이트
+  }
 }
 
 class CalendarController extends GetxController {
