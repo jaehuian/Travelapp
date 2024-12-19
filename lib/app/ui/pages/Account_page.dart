@@ -94,56 +94,6 @@ class _AccountBodyState extends State<AccountBodyState> {
     return currentBodies[widget.bodyIndex]; //핸재의 body 영역을 그림
   }
 }
-// class YearMonthNavigation extends StatelessWidget {
-//   final CalendarController controller;
-//   final VoidCallback onYearMonthPickerTap;
-//
-//   const YearMonthNavigation({
-//     required this.controller,
-//     required this.onYearMonthPickerTap,
-//     super.key,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             IconButton(
-//               icon: Icon(Icons.arrow_left),
-//               onPressed: () => controller.previousMonth(),
-//             ),
-//             Obx(() => TextButton(
-//               onPressed: onYearMonthPickerTap,
-//               child:  Text(
-//                 "${controller.year.value}년 ${controller.month.value}월",
-//                 style: const TextStyle(
-//                   fontSize: 18,
-//                   // color: Colors.white,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             )),
-//             IconButton(
-//               icon: const Icon(Icons.arrow_right, color: Colors.white),
-//               onPressed: () => controller.nextMonth(),
-//             ),
-//           ],
-//         ),
-//         Obx(() => Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Text("수입: ${controller.totalIncome.value}원  |  "),
-//               Text("지출: ${controller.totalExpense.value}원"),
-//             ],
-//           ),
-//         )),
-//       ],
-//      );}}
 class YearMonthNavigation extends StatelessWidget {
   final CalendarController controller;
   final VoidCallback onYearMonthPickerTap;
